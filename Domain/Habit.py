@@ -1,11 +1,11 @@
 from datetime import datetime
-from domain import HabitCompletionHistory
+from domain import habit_completion_history
 
 class Habit():
     def __init__(self,name):
         self.name = name
         self.creation_date = datetime.now()
-        self.completion_history = HabitCompletionHistory()
+        self.completion_history = habit_completion_history()
         
     def edit_habit_name(self,new_name):
         self.name = new_name
