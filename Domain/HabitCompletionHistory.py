@@ -8,5 +8,8 @@ class HabitCompletionHistory:
             return True
         return False
     
+    def get_all_completed_dates(self):
+	    return self.dates
+
     # def was_completed_on(self, date):
     # 	return date in self.dates
