@@ -1,10 +1,10 @@
-from domain.Habit import Habit
+from domain.habit import Habit
 
-def create_habit(name):
+def create_habit(name,habit_repository):
     if not is_name_valid(name):
         raise ValueError("Habit name is not valid.")
     habit = Habit(name)
-    #habit_repository.save(habit) de esto se encarga la capa de infraestructura pero no esta definida aun.
+    habit_repository.save(habit)
     return habit
     
 def is_name_valid(name):
