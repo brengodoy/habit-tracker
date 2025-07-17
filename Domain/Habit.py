@@ -1,5 +1,5 @@
 from datetime import datetime
-from domain import HabitCompletionHistory
+from domain.habit_completion_history import HabitCompletionHistory
 
 class Habit():
     def __init__(self,name):
