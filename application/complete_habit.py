@@ -1,4 +1,6 @@
-def complete_habit(habit,habit_repository):
+from infrastructure.habit_repository import HabitRepositorySQLite
+
+def complete_habit(habit: object, habit_repository: HabitRepositorySQLite) -> object:
     if habit.mark_completed_today():        
         habit_repository.save(habit)
         return habit
