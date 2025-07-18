@@ -28,6 +28,17 @@ class HabitRepositorySQLite():
 			'''
         cursor.execute(sql, habit_data)
         self.conn.commit()
+        habit.id = cursor.lastrowid
     
-    def delete(habit):
-        pass
+    def delete(self,habit):
+        if habit.id is None:
+            raise ValueError("Habit must have an ID to be deleted.")
+        cursor = self.conn.cursor()
+        sql = 'DELETE FROM habit WHERE id = ?'
+        cursor.execute(sql,(habit.id,))
+        self.conn.commit()
+        
+    def get_all_habits(self):
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT * FROM habit')
+        return cursor.fetchall()

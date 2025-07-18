@@ -2,7 +2,8 @@ from datetime import datetime
 from domain.habit_completion_history import HabitCompletionHistory
 
 class Habit():
-    def __init__(self,name):
+    def __init__(self,name,habit_id=None):
+        self.id = habit_id
         self.name = name
         self.creation_date = datetime.now()
         self.completion_history = HabitCompletionHistory()
