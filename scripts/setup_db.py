@@ -9,6 +9,9 @@ habit = Habit("Drink water")
 repo.save(habit)
 print("✅ ¡Habit saved successfully!")
 
+repo.edit(habit,"Drink juice")
+print("✅ ¡Habit updated successfully!")
+
 repo.delete(habit)
 print("✅ ¡Habit deleted successfully!")
 

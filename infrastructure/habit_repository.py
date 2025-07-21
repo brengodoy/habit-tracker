@@ -42,3 +42,12 @@ class HabitRepositorySQLite():
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM habit')
         return cursor.fetchall()
+    
+    def edit(self,habit):
+        cursor = self.conn.cursor()
+        sql = '''UPDATE habit 
+            SET name = ? 
+            WHERE id = ?'''
+        data = (habit.name,habit.id)
+        cursor.execute(sql,data)
+        self.conn.commit()
