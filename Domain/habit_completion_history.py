@@ -1,8 +1,10 @@
+from datetime import date
+
 class HabitCompletionHistory:
     def __init__(self):
         self.dates = []
         
-    def mark_completed(self,date):
+    def mark_completed(self,date : date) -> bool:
         if date not in self.dates:
             self.dates.append(date)
             return True
@@ -10,6 +12,3 @@ class HabitCompletionHistory:
     
     def get_all_completed_dates(self):
 	    return self.dates
-
-    # def was_completed_on(self, date):
-    # 	return date in self.dates
