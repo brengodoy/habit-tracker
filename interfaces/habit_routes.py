@@ -30,7 +30,7 @@ def get_habits_route():
 				"id": h.id,
 				"name": h.name,
 				"creation_date": h.creation_date,
-				"completion_history": h.completion_history,
+				"completion_history": h.completion_history.dates,
 			}
 			for h in habits
 		]

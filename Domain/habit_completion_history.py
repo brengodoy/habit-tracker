@@ -1,8 +1,8 @@
 from datetime import date
 
 class HabitCompletionHistory:
-    def __init__(self):
-        self.dates = []
+    def __init__(self,dates=None):
+        self.dates = dates or []
         
     def mark_completed(self,date : date) -> bool:
         if date not in self.dates:
