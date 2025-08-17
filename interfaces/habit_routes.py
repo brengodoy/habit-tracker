@@ -2,6 +2,7 @@ from flask import Blueprint,jsonify,request
 from application.create_habit import create_habit
 from application.complete_habit import complete_habit
 from application.edit_habit import edit_habit
+from application.get_all_habits import get_all_habits
 from infrastructure.habit_repository import HabitRepositorySQLite
 
 habit_blueprint = Blueprint('habit_blueprint',__name__)
@@ -20,9 +21,9 @@ def create_habit_route():
     })
     
 @habit_blueprint.route("/habits", methods = ["GET"])
-def get_habits_route():
+def get_all_habits_route():
     repo = HabitRepositorySQLite()
-    habits = repo.get_all_habits()
+    habits = get_all_habits(repo)
     print(habits)
     return jsonify({
 		"habits": [
