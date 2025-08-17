@@ -1,6 +1,7 @@
 from flask import Blueprint,jsonify,request
 from application.create_habit import create_habit
 from application.complete_habit import complete_habit
+from application.edit_habit import edit_habit
 from infrastructure.habit_repository import HabitRepositorySQLite
 
 habit_blueprint = Blueprint('habit_blueprint',__name__)
@@ -47,3 +48,18 @@ def complete_habit_route(habit_id):
         "completion_history": habit.completion_history.dates,
 	})
     
+@habit_blueprint.route("/habits/<int:habit_id>", methods=["PATCH"])
+def edit_habit_route(habit_id):
+    data = request.get_json()
+    if "new_name" not in data:
+        return jsonify({"error": "Missing 'new_name' field"}), 400
+    new_name = data["new_name"]
+    repo = HabitRepositorySQLite()
+    habit = repo.get_habit_by_id(habit_id)
+    edit_habit(new_name,habit,repo)
+    return jsonify({
+		"id": habit.id,
+        "name": habit.name,
+        "creation_date": habit.creation_date,
+        "completion_history": habit.completion_history.dates,		
+	})
