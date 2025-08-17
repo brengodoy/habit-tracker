@@ -10,7 +10,9 @@ class Habit():
         self.id = habit_id
         self.name = name
         self.creation_date = creation_date or datetime.now()
-        self.completion_history = completion_history or HabitCompletionHistory()
+        self.completion_history = (
+            completion_history or HabitCompletionHistory()
+            )
         
     def edit_habit_name(self,new_name):
         self.name = new_name

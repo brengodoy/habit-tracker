@@ -46,7 +46,8 @@ class HabitRepositorySQLite():
     def get_all_habits(self) -> list[any]:
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM habit')
-        return cursor.fetchall()
+        rows = cursor.fetchall()
+        return [Habit(habit_id=row[0], name=row[1], creation_date=row[2], completion_history=row[3]) for row in rows]
     
     def edit(self,habit : object):
         cursor = self.conn.cursor()
