@@ -1,9 +1,10 @@
 from domain.habit import Habit
 from infrastructure.habit_repository import HabitRepositorySQLite
+from domain.exceptions import HabitNameNotValid
 
 def create_habit(habit_name: str, habit_repository: HabitRepositorySQLite) -> object:
     if not is_name_valid(habit_name):
-        raise ValueError("Habit name is not valid.")
+        raise HabitNameNotValid("Habit name is not valid.")
     habit = Habit(habit_name)
     habit_repository.save(habit)
     return habit

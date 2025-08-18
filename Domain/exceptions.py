@@ -13,3 +13,6 @@ class RepositoryNotFoundError(CustomError):
     
 class HabitAlreadyCompletedError(CustomError):
     status_code = 400
+    
+class HabitNameNotValid(CustomError):
+    status_code = 400

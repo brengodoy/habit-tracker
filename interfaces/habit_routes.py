@@ -26,7 +26,6 @@ def create_habit_route():
 def get_all_habits_route():
     repo = HabitRepositorySQLite()
     habits = get_all_habits(repo)
-    print(habits)
     return jsonify({
 		"habits": [
 			{

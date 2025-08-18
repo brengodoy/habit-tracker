@@ -1,9 +1,17 @@
 from infrastructure.habit_repository import HabitRepositorySQLite
 from typing import Union
+from domain.exceptions import RepositoryNotFoundError,HabitNotFoundError
+from domain.habit import Habit
 
-def delete_habit(habit_repository: HabitRepositorySQLite,habit: object) -> Union[bool, dict]:
-    try:
-        habit_repository.delete(habit)
-        return True
-    except Exception as e:
-        return({'status':'error','message':f'Could not delete habit: {e}'})
+def delete_habit(
+    habit_repository: HabitRepositorySQLite, 
+    habit: Habit
+) -> bool:
+    if not habit_repository:
+        raise RepositoryNotFoundError("Habit repository cannot be None.")
+    
+    if not habit:
+        raise HabitNotFoundError("Habit cannot be None.")
+    
+    habit_repository.delete(habit)
+    return True
