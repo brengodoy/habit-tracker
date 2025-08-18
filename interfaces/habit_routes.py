@@ -42,7 +42,7 @@ def get_all_habits_route():
 @habit_blueprint.route("/habits/<int:habit_id>/complete", methods=["PATCH"])
 def complete_habit_route(habit_id):
     repo = HabitRepositorySQLite()
-    habit = repo.get_habit_by_id(habit_id)
+    habit = get_habit(habit_id,repo)
     complete_habit(habit,repo)
     return jsonify({
 		"id": habit.id,
@@ -58,7 +58,7 @@ def edit_habit_route(habit_id):
         return jsonify({"error": "Missing 'new_name' field"}), 400
     new_name = data["new_name"]
     repo = HabitRepositorySQLite()
-    habit = repo.get_habit_by_id(habit_id)
+    habit = get_habit(habit_id,repo)
     edit_habit(new_name,habit,repo)
     return jsonify({
 		"id": habit.id,
@@ -70,7 +70,7 @@ def edit_habit_route(habit_id):
 @habit_blueprint.route("/habits/<int:habit_id>", methods=["DELETE"])
 def delete_habit_route(habit_id):
     repo = HabitRepositorySQLite()
-    habit = repo.get_habit_by_id(habit_id)
+    habit = get_habit(habit_id,repo)
     delete_habit(repo,habit)
     return jsonify({"message": f"Habit {habit_id} deleted successfully"}), 200
 
