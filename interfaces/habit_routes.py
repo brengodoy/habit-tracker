@@ -4,6 +4,7 @@ from application.complete_habit import complete_habit
 from application.edit_habit import edit_habit
 from application.get_all_habits import get_all_habits
 from application.delete_habit import delete_habit
+from application.get_habit import get_habit
 from infrastructure.habit_repository import HabitRepositorySQLite
 
 habit_blueprint = Blueprint('habit_blueprint',__name__)
@@ -72,3 +73,14 @@ def delete_habit_route(habit_id):
     habit = repo.get_habit_by_id(habit_id)
     delete_habit(repo,habit)
     return jsonify({"message": f"Habit {habit_id} deleted successfully"}), 200
+
+@habit_blueprint.route("/habits/<int:habit_id>", methods=["GET"])
+def get_habit_route(habit_id):
+    repo = HabitRepositorySQLite()
+    habit = get_habit(habit_id, repo)    
+    return jsonify({
+		"id": habit.id,
+		"name": habit.name,
+		"creation_date": habit.creation_date,
+		"completion_history": habit.completion_history.dates,                    
+    })
