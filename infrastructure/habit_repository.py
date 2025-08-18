@@ -3,6 +3,7 @@ import json
 from domain.habit_completion_history import HabitCompletionHistory
 from domain.habit import Habit
 from datetime import datetime
+from domain.exceptions import HabitNotFoundError
 
 class HabitRepositorySQLite():
     def __init__(self,db_path="habits.db"):
@@ -96,5 +97,5 @@ class HabitRepositorySQLite():
                 ]
             return Habit(name, habit_id, creation_date, history)
         else:
-            raise Exception('Habit not found.')
+            raise HabitNotFoundError('Habit not found.')
         
