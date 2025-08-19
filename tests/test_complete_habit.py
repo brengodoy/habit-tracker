@@ -3,6 +3,7 @@ from infrastructure.habit_repository import HabitRepositorySQLite
 from application.complete_habit import complete_habit
 from application.create_habit import create_habit
 from datetime import datetime
+from domain.exceptions import HabitAlreadyCompletedError, HabitNotFoundError, RepositoryNotFoundError 
 
 @pytest.fixture
 def repo():
@@ -18,17 +19,17 @@ def test_complete_habit_correct(repo,habit):
     
 def test_already_completed_habit(repo,habit):
     complete_habit(habit,repo)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(HabitAlreadyCompletedError) as e:
         complete_habit(habit,repo)
     assert "Habit can only be marked as completed once a day." in str(e.value)
 
 def test_complete_none_habit(repo):
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(HabitNotFoundError) as e:
         complete_habit(None,repo)
     assert "Habit cannot be None." in str(e.value)
     
 def test_complete_none_repository(habit):
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(RepositoryNotFoundError) as e:
         complete_habit(habit,None)
     assert "Habit repository cannot be None." in str(e.value)
     

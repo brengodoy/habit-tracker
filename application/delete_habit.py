@@ -13,5 +13,8 @@ def delete_habit(
     if not habit:
         raise HabitNotFoundError("Habit cannot be None.")
     
+    if habit.id == None:
+        raise HabitNotFoundError("Habit ID cannot be None.")
+    
     habit_repository.delete(habit)
     return True

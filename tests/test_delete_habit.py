@@ -3,6 +3,7 @@ from infrastructure.habit_repository import HabitRepositorySQLite
 from application.create_habit import create_habit
 from application.delete_habit import delete_habit
 from domain.habit import Habit
+from domain.exceptions import HabitNotFoundError
 
 @pytest.fixture
 def repo():
@@ -18,8 +19,10 @@ def test_delete_habit(repo,habit):
     assert all(habit_tuple[1] != 'Clean bedroom' for habit_tuple in all_habits)
     
 def test_delete_non_existing_habit(repo):
-    fake_habit = Habit('Clean kitchen',None)
-    assert delete_habit(repo,fake_habit)['status'] == 'error'
+    fake_habit = Habit(name='Clean kitchen',habit_id=None)
+    with pytest.raises(HabitNotFoundError) as e:
+        delete_habit(repo,fake_habit)
+    assert "Habit ID cannot be None." in str(e.value)
     
 def test_delete_habit_db_error(monkeypatch, repo, habit):
     """
@@ -29,5 +32,7 @@ def test_delete_habit_db_error(monkeypatch, repo, habit):
     def fake_delete(_):
         raise Exception("DB connection lost")
     monkeypatch.setattr(repo, "delete", fake_delete)
-    result = delete_habit(repo, habit)
-    assert result['status'] == 'error'
+    
+    with pytest.raises(Exception) as e:
+        delete_habit(repo, habit)
+    assert "DB connection lost" in str(e.value)

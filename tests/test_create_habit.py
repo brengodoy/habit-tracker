@@ -1,6 +1,7 @@
 import pytest
 from application.create_habit import create_habit
 from infrastructure.habit_repository import HabitRepositorySQLite
+from domain.exceptions import HabitNameNotValid
 
 @pytest.fixture
 def repo():
@@ -18,19 +19,19 @@ def test_create_habit_with_valid_mixed_name(repo):
     
 def test_create_habit_without_name(repo):
     habit_name = None
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(HabitNameNotValid) as exception_info:
         create_habit(habit_name,repo)
     assert "Habit name is not valid." in str(exception_info.value)
     
 def test_create_habit_numbers_name(repo):
     habit_name = '12345'
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(HabitNameNotValid) as exception_info:
         create_habit(habit_name,repo)
     assert "Habit name is not valid." in str(exception_info.value)
     
 def test_create_habit_blank_name(repo):
     habit_name = ''
-    with pytest.raises(ValueError) as exception_info:
+    with pytest.raises(HabitNameNotValid) as exception_info:
         create_habit(habit_name,repo)
     assert "Habit name is not valid." in str(exception_info.value)
     
@@ -38,4 +39,4 @@ def test_create_habit_saves_to_db(repo):
     habit_name = 'meditate'
     create_habit(habit_name, repo)
     all_habits = repo.get_all_habits()
-    assert any(row[1] == habit_name for row in all_habits)
+    assert any(row.name == habit_name for row in all_habits)
