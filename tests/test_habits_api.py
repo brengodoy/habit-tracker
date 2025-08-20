@@ -72,3 +72,30 @@ class TestCompleteHabit:
     def test_complete_none_habit(self, client):
         response = client.patch("/habits/None/complete")
         assert response.status_code == 404
+
+class TestDeleteHabit:
+    def test_success(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        delete_habit_response = client.delete(f"/habits/{str(habit_id)}")
+        assert delete_habit_response.status_code == 200
+        message = delete_habit_response.get_json()["message"]
+        assert message == f"Habit {str(habit_id)} deleted successfully"
+        
+    def test_non_existing_habit(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        client.delete(f"/habits/{str(habit_id)}")
+        
+        delete_habit_response = client.delete(f"/habits/{str(habit_id)}")
+        assert delete_habit_response.status_code == 404
+        error = delete_habit_response.get_json()["error"]
+        assert error == "Habit not found."
