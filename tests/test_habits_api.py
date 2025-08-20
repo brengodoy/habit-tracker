@@ -99,3 +99,81 @@ class TestDeleteHabit:
         assert delete_habit_response.status_code == 404
         error = delete_habit_response.get_json()["error"]
         assert error == "Habit not found."
+        
+class TestEditHabit:
+    def test_success(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        edit_habit_response = client.patch(
+            f"/habits/{str(habit_id)}", 
+            json = {"new_name": "Drink juice"}
+        )
+        assert edit_habit_response.status_code == 200
+        edited_habit_data = edit_habit_response.get_json()
+        assert edited_habit_data["id"] == habit_id
+        assert edited_habit_data["name"] == "Drink juice"
+    
+    def test_success_mixed_name(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        edit_habit_response = client.patch(
+            f"/habits/{str(habit_id)}", 
+            json = {"new_name": "drink 2L - water"}
+        )
+        assert edit_habit_response.status_code == 200
+        edited_habit_data = edit_habit_response.get_json()
+        assert edited_habit_data["id"] == habit_id
+        assert edited_habit_data["name"] == "drink 2L - water"
+        
+    def test_no_new_name(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        edit_habit_response = client.patch(
+            f"/habits/{str(habit_id)}", 
+            json = {"new_name": None}
+        )
+        assert edit_habit_response.status_code == 400
+        error = edit_habit_response.get_json()["error"]
+        assert error == "Habit name is not valid."
+        
+    def test_numbers_name(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        edit_habit_response = client.patch(
+            f"/habits/{str(habit_id)}", 
+            json = {"new_name": "123"}
+        )
+        assert edit_habit_response.status_code == 400
+        error = edit_habit_response.get_json()["error"]
+        assert error == "Habit name is not valid."
+        
+    def test_blank_name(self, client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        edit_habit_response = client.patch(
+            f"/habits/{str(habit_id)}", 
+            json = {"new_name": ""}
+        )
+        assert edit_habit_response.status_code == 400
+        error = edit_habit_response.get_json()["error"]
+        assert error == "Habit name is not valid."
