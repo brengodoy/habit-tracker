@@ -59,12 +59,18 @@ Example response for `GET /habits`:
 
 ## 🚀 How to Run
 
-1. **Clone the repo**
+1. **Clone the repo:**
 ```bash
 git clone https://github.com/brengodoy/habit-tracker.git
 cd habit-tracker
 ```
-2. **Run the app:**
+
+2. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+3. **Run the app:**
 ```bash
 python -m interfaces.flask_api
 ```
