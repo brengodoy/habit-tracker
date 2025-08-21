@@ -177,3 +177,18 @@ class TestEditHabit:
         assert edit_habit_response.status_code == 400
         error = edit_habit_response.get_json()["error"]
         assert error == "Habit name is not valid."
+        
+class TestGetAllHabits:
+    def test_success(self,client):
+        create_habit_response = client.post(
+            "/habits", 
+            json = {"habit_name": "Drink water"}
+        )
+        habit_id = create_habit_response.get_json()["id"]
+        
+        get_all_habits_response = client.get("/habits")
+        assert get_all_habits_response.status_code == 200
+        
+        habits_data = get_all_habits_response.get_json()["habits"]
+        assert any(h["id"] == habit_id for h in habits_data)
+        
